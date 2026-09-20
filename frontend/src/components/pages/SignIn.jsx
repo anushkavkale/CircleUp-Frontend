@@ -33,6 +33,7 @@ const SignIn = () => {
             password: Password
           }
           try{
+            await Axios.get("csrftoken/")
             const response = await Axios.post("signin/", data)
             if(response.status === 200){
               localStorage.setItem("userId", response.data.user_id)
