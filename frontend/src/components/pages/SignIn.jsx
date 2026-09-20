@@ -1,5 +1,5 @@
-import React, { useEffect,useState } from 'react'
-import Axios from '../Axios';
+import React, { useState } from 'react'
+import { login } from '../../services/auth';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button"
 import {
@@ -20,11 +20,6 @@ const SignIn = () => {
 
   const navigate = new useNavigate();
 
-  useEffect(() => {
-    Axios.get("csrftoken/").catch(() => {
-      toast.error("Unable to connect to the server.")
-    })
-  }, [])
   const handleSubmit = async (e) => {
       e.preventDefault()    
       const data = 
@@ -33,14 +28,11 @@ const SignIn = () => {
             password: Password
           }
           try{
-            await Axios.get("csrftoken/")
-            const response = await Axios.post("signin/", data)
-            if(response.status === 200){
-              localStorage.setItem("userId", response.data.user_id)
-              navigate("/feed")
-            }
+            const response = await login(data.username, data.password)
+            localStorage.setItem("userId", response.user_id)
+            navigate("/feed")
           } catch(err){
-                toast.error(err.response?.data?.error || "Invalid username or password.")
+                toast.error(err.message || "Invalid username or password.")
             
           }
 

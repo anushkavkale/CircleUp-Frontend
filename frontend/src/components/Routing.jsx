@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import {Navigate, Outlet } from "react-router-dom"
-import Axios from '../components/Axios';
+import { checkAuth } from '../services/auth';
 
 export const Private = () => {
     const [Authed, setAuthed] = useState(false)
@@ -8,7 +8,8 @@ export const Private = () => {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        Axios.get("check/").then(() => {
+        checkAuth().then((authenticated) => {
+            if (!authenticated) throw new Error("Not authenticated")
             console.log("Authenticated")
             setAuthed(true)
             setLoading(false)
@@ -27,7 +28,8 @@ export const Public = () => {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        Axios.get("check/").then(() => {
+        checkAuth().then((authenticated) => {
+            if (!authenticated) throw new Error("Not authenticated")
             console.log("Authenticated")
             setAuthed(true)
             setLoading(false)
