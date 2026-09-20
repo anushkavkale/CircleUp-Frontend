@@ -6,7 +6,7 @@ import axios from "axios";
     if (parts.length === 2) return parts.pop().split(";").shift();
   }
   const csrftoken = getCookie('csrftoken');
-  const baseUrl = "http://localhost:8000/api/"
+  const baseUrl = `${import.meta.env.VITE_API_URL || "https://circleup-backend-2.onrender.com"}/api/`
 
 const AxiosInstance = axios.create({
     baseURL: baseUrl,
