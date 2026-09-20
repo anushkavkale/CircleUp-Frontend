@@ -21,14 +21,15 @@ const SignIn = () => {
   const navigate = new useNavigate();
 
   useEffect(() => {
-    Axios.get("csrftoken").then((res) => {
+    Axios.get("csrftoken/").catch(() => {
+      toast.error("Unable to connect to the server.")
     })
   }, [])
   const handleSubmit = async (e) => {
       e.preventDefault()    
       const data = 
           {
-            username: Username.toLowerCase(),
+            username: Username.trim().toLowerCase(),
             password: Password
           }
           try{
@@ -38,7 +39,7 @@ const SignIn = () => {
               navigate("/feed")
             }
           } catch(err){
-                toast.error(err.response.data.error)
+                toast.error(err.response?.data?.error || "Invalid username or password.")
             
           }
 

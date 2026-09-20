@@ -5,14 +5,13 @@ import axios from "axios";
     const parts = value.split(`; ${name}=`);
     if (parts.length === 2) return parts.pop().split(";").shift();
   }
-  const csrftoken = getCookie('csrftoken');
   const baseUrl = `${import.meta.env.VITE_API_URL || "https://circleup-backend-2.onrender.com"}/api/`
 
 const AxiosInstance = axios.create({
     baseURL: baseUrl,
     timeout:5000,
     withCredentials:true,
-    headers:({"X-CSRFToken" : csrftoken})
+    headers:({"Content-Type": "application/json"})
 })
   AxiosInstance.interceptors.request.use((config) =>{
     const csrftoken = getCookie("csrftoken");
