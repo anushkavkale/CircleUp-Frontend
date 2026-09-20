@@ -13,7 +13,7 @@ export const Private = () => {
             console.log("Authenticated")
             setAuthed(true)
             setLoading(false)
-        }).catch((err) => {
+        }).catch(() => {
             console.log("Not Authenticated")
             setAuthed(false)
             setLoading(false)
@@ -33,7 +33,7 @@ export const Public = () => {
             console.log("Authenticated")
             setAuthed(true)
             setLoading(false)
-        }).catch((err)=>{
+        }).catch(()=>{
             console.log("Not Authenticated")
             setAuthed(false)
             setLoading(false)

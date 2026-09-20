@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -14,12 +12,14 @@ import Settings from "./Settings";
 import { useNavigate } from "react-router";
 
 import Axios from "./Axios";
+import { clearTokens } from "../services/auth";
 
 export default function ProfileDropDown({username,email , pfp, bio}) {
   const navigate = new useNavigate()
 
   const logout = () => {
-    Axios.post("logout/").then((res) => {
+    Axios.post("logout/").catch(() => {}).finally(() => {
+      clearTokens()
       navigate("/signin")
     })
   }

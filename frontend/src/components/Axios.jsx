@@ -1,24 +1,32 @@
 import axios from "axios";
-
-  function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(";").shift();
-  }
-  const baseUrl = `${import.meta.env.VITE_API_URL || "https://circleup-backend-2.onrender.com"}/api/`
+import { API, clearTokens, getAccessToken, refreshAccessToken } from "../services/auth";
 
 const AxiosInstance = axios.create({
-    baseURL: baseUrl,
+    baseURL: `${API}/`,
     timeout:5000,
-    withCredentials:true,
     headers:({"Content-Type": "application/json"})
 })
   AxiosInstance.interceptors.request.use((config) =>{
-    const csrftoken = getCookie("csrftoken");
-    if(csrftoken){
-        config.headers["X-CSRFToken"] = csrftoken
-    }
+    const token = getAccessToken();
+    if (token) config.headers.Authorization = `Bearer ${token}`;
     return config
   });
+
+  AxiosInstance.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+      const originalRequest = error.config;
+      if (error.response?.status !== 401 || originalRequest?._retry) {
+        return Promise.reject(error);
+      }
+      originalRequest._retry = true;
+      if (!(await refreshAccessToken())) {
+        clearTokens();
+        return Promise.reject(error);
+      }
+      originalRequest.headers.Authorization = `Bearer ${getAccessToken()}`;
+      return AxiosInstance(originalRequest);
+    }
+  );
 
   export default AxiosInstance;
