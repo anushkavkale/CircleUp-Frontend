@@ -37,6 +37,7 @@ export async function login(username, password) {
 }
 
 export async function checkAuth() {
+  await getCsrfToken();
   const response = await fetch(`${API}/check/`, {
     method: "GET",
     credentials: "include",
