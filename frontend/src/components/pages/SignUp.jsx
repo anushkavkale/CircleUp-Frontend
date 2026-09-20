@@ -72,8 +72,8 @@ const SignUp = () => {
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
-                type="email"
-                placeholder="Enter your email"
+                type="text"
+                placeholder="Enter your email or contact"
                 required
                 onChange={(e) => SetEmail(e.target.value)}
               />
